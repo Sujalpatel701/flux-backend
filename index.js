@@ -14,7 +14,7 @@ app.use(express.json());
 app.use("/api/auth", authRoutes);
 
 app.get("/", (req, res) => {
-  res.send("FrameFlux API");
+  res.send("FrameFlux API by sujal patel");
 });
 
 const PORT = process.env.PORT || 5000;
