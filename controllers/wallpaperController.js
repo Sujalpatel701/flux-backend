@@ -50,4 +50,35 @@ const getWallpapers = async (req, res) => {
   }
 };
 
-module.exports = { uploadWallpaper, getWallpapers };
+const getWallpaperCountByEmail = async (req, res) => {
+  const email = req.params.email;
+
+  try {
+    const count = await Wallpaper.countDocuments({ email });
+    res.status(200).json({ count });
+  } catch (error) {
+    console.error("Count error:", error);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+const getWallpaperById = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const wallpaper = await Wallpaper.findById(id);
+    if (!wallpaper) {
+      return res.status(404).json({ message: "Wallpaper not found" });
+    }
+    res.json(wallpaper);
+  } catch (error) {
+    console.error("Get wallpaper by ID error:", error);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
+module.exports = {
+  // export your other functions as well
+  uploadWallpaper,
+  getWallpapers,
+  getWallpaperCountByEmail,
+  getWallpaperById, // add this export
+};

@@ -27,6 +27,18 @@ const fileFilter = (req, file, cb) => {
 
 const upload = multer({ storage, fileFilter });
 
+const {
+  getWallpaperCountByEmail
+} = require("../controllers/wallpaperController");
+router.get("/count/:email", getWallpaperCountByEmail); // this line should work now
+
+// In routes/wallpaperRoutes.js
+
+const { getWallpaperById } = require("../controllers/wallpaperController");
+
+// Add this line below existing routes
+router.get("/:id", getWallpaperById);
+
 router.post("/upload", upload.single("image"), checkWallpaperLimit, uploadWallpaper);
 router.get("/", getWallpapers);
 
