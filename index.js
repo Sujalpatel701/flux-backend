@@ -7,6 +7,7 @@ const userImageRoutes = require("./routes/userImageRoutes"); // ✅ new line
 const cors = require("cors");
 const path = require("path");
 const wallpaperRoutes = require("./routes/wallpaperRoutes");
+const commentRoutes = require("./routes/commentRoutes");
 
 dotenv.config();
 
@@ -29,6 +30,7 @@ app.use("/api/auth", authRoutes);
 app.use("/api/user", userRoutes);
 app.use("/api/profile", userImageRoutes); // ✅ new line
 app.use("/api/wallpapers", wallpaperRoutes);
+app.use("/api/comments", commentRoutes);
 
 app.get("/", (req, res) => {
   res.send("FrameFlux API by Sujal Patel");
