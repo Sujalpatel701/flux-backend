@@ -1,5 +1,6 @@
 const Wallpaper = require("../models/Wallpaper");
 const path = require("path");
+const fs = require('fs');
 
 const uploadWallpaper = async (req, res) => {
   const { title, email, description, wallpaperType } = req.body;
@@ -75,10 +76,39 @@ const getWallpaperById = async (req, res) => {
   }
 };
 
+const deleteWallpaper = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const wallpaper = await Wallpaper.findById(id);
+    if (!wallpaper) {
+      return res.status(404).json({ message: "Wallpaper not found" });
+    }
+
+    const imagePath = path.join(__dirname, "..", "uploads", wallpaper.imageName);
+
+    // Delete image file
+    fs.unlink(imagePath, async (err) => {
+      if (err && err.code !== "ENOENT") {
+        console.error("Error deleting image file:", err);
+        return res.status(500).json({ message: "Failed to delete image file" });
+      }
+
+      // Delete document from MongoDB
+      await Wallpaper.findByIdAndDelete(id);
+      res.status(200).json({ message: "Wallpaper deleted successfully" });
+    });
+
+  } catch (error) {
+    console.error("Error deleting wallpaper:", error);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
 module.exports = {
-  // export your other functions as well
   uploadWallpaper,
   getWallpapers,
   getWallpaperCountByEmail,
-  getWallpaperById, // add this export
+  getWallpaperById,
+  deleteWallpaper, // ✅ add this
 };

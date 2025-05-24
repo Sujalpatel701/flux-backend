@@ -41,23 +41,24 @@ const getCommentsByWallpaperId = async (req, res) => {
   }
 };
 
-// Delete a comment by its ID
+// Delete all comments for a specific wallpaper ID
 const deleteComment = async (req, res) => {
-  const { id } = req.params;
+  const { id } = req.params; // 'id' now refers to wallpaperId
 
   try {
-    const deleted = await Comment.findByIdAndDelete(id);
+    const result = await Comment.deleteMany({ wallpaperId: id });
 
-    if (!deleted) {
-      return res.status(404).json({ message: "Comment not found" });
+    if (result.deletedCount === 0) {
+      return res.status(404).json({ message: "No comments found for this wallpaper" });
     }
 
-    res.status(200).json({ message: "Comment deleted" });
+    res.status(200).json({ message: "All comments deleted", deletedCount: result.deletedCount });
   } catch (error) {
-    console.error("Delete comment error:", error);
+    console.error("Delete comments error:", error);
     res.status(500).json({ message: "Server error" });
   }
 };
+
 
 module.exports = {
   addComment,

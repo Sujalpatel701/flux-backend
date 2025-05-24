@@ -3,6 +3,7 @@ const multer = require("multer");
 const path = require("path");
 const { uploadWallpaper, getWallpapers } = require("../controllers/wallpaperController");
 const checkWallpaperLimit = require("../middleware/checkWallpaperLimit");
+const { deleteWallpaper } = require("../controllers/wallpaperController");
 
 const router = express.Router();
 
@@ -38,6 +39,7 @@ const { getWallpaperById } = require("../controllers/wallpaperController");
 
 // Add this line below existing routes
 router.get("/:id", getWallpaperById);
+router.delete("/:id", deleteWallpaper);
 
 router.post("/upload", upload.single("image"), checkWallpaperLimit, uploadWallpaper);
 router.get("/", getWallpapers);
